@@ -72,68 +72,71 @@ class _PageAccueilState extends State<PageAccueil> {
       body: Center(
         child: SafeArea(
           bottom: true,
-          child: Container(
-            // Délimitation périphérique pour aérer la présentation
-            margin: const EdgeInsets.all(10),
-            width: MediaQuery.of(context).size.width,
+          child: _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : Container(
+                  // Délimitation périphérique pour aérer la présentation
+                  margin: const EdgeInsets.all(10),
+                  width: MediaQuery.of(context).size.width,
 
-            // Cadrage décoratif avec bordures thématiques
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Theme.of(context).colorScheme.primary,
-                width: 3,
-              ),
-              borderRadius: BorderRadius.circular(10),
-            ),
-
-            // Logique conditionnelle d'affichage selon l'état du système
-            child: _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : data.isNotEmpty
-                ? ListView.separated(
-                    // Construction dynamique de chaque élément utilisateur
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        // Avatar généré algorithmiquement selon l'identifiant
-                        leading: CircleAvatar(
-                          backgroundImage: NetworkImage(
-                            "https://i.pravatar.cc/150?img=${data[index]["id"]}",
-                          ),
-                          radius: 30,
-                        ),
-                        // Affichage de l'identité principale
-                        title: Text(
-                          data[index]["name"]?.toString() ?? 'Non spécifié',
-                          style: const TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        // Information de contact secondaire
-                        subtitle: Text(
-                          data[index]["email"]?.toString() ??
-                              'Email non disponible',
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                      );
-                    },
-                    // Séparateur visuel entre les entrées de la liste
-                    separatorBuilder: (context, index) {
-                      return Divider(
-                        color: Theme.of(context).colorScheme.tertiary,
-                        thickness: 4,
-                        height: 1,
-                      );
-                    },
-                    // Détermination du nombre d'éléments à afficher
-                    itemCount: data.length,
-                  )
-                : Center(
-                    // Message contextuel en l'absence de données
-                    child: Text(
-                      "Aucune donnée disponible pour l'affichage",
-                      style: Theme.of(context).textTheme.headlineMedium,
-                      textAlign: TextAlign.center,
+                  // Cadrage décoratif avec bordures thématiques
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Theme.of(context).colorScheme.primary,
+                      width: 3,
                     ),
+                    borderRadius: BorderRadius.circular(10),
                   ),
-          ),
+
+                  // Logique conditionnelle d'affichage selon l'état du système
+                  child: data.isNotEmpty
+                      ? ListView.separated(
+                          // Construction dynamique de chaque élément utilisateur
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              // Avatar généré algorithmiquement selon l'identifiant
+                              leading: CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                  "https://i.pravatar.cc/150?img=${data[index]["id"]}",
+                                ),
+                                radius: 30,
+                              ),
+                              // Affichage de l'identité principale
+                              title: Text(
+                                data[index]["name"]?.toString() ??
+                                    'Non spécifié',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              // Information de contact secondaire
+                              subtitle: Text(
+                                data[index]["email"]?.toString() ??
+                                    'Email non disponible',
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                            );
+                          },
+                          // Séparateur visuel entre les entrées de la liste
+                          separatorBuilder: (context, index) {
+                            return Divider(
+                              color: Theme.of(context).colorScheme.tertiary,
+                              thickness: 4,
+                              height: 1,
+                            );
+                          },
+                          // Détermination du nombre d'éléments à afficher
+                          itemCount: data.length,
+                        )
+                      : Center(
+                          // Message contextuel en l'absence de données
+                          child: Text(
+                            "Aucune donnée disponible pour l'affichage",
+                            style: Theme.of(context).textTheme.headlineMedium,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                ),
         ),
       ),
     );
